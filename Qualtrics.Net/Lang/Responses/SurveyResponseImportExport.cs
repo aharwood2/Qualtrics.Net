@@ -21,7 +21,7 @@ using System.Text;
 
 namespace Qualtrics.Net.Lang.Responses.SurveyResponseImportExport
 {
-    class CreationResponse : Response
+    public class CreationResponse : Response
     {
         public CreationResponseResult Result { get; internal set; }
     }

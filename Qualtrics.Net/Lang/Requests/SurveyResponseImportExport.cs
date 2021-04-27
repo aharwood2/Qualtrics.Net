@@ -21,7 +21,7 @@ using System.Text;
 
 namespace Qualtrics.Net.Lang.Requests.SurveyResponseImportExport
 {
-    class ExportCreationRequest : Request
+    public class ExportCreationRequest : Request
     {
         public string Format { get; set; }
 
