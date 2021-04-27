@@ -25,33 +25,33 @@ namespace Qualtrics.Net.Lang.Requests.SurveyResponseImportExport
     {
         public string Format { get; set; }
 
-        public bool BreakoutSets { get; set; }
+        public bool? BreakoutSets { get; set; }
 
-        public bool Compress { get; set; }
+        public bool? Compress { get; set; } = true;
 
         public string EndDate { get; set; }
 
-        public bool ExportResponsesInProgress { get; set; }
+        public bool? ExportResponsesInProgress { get; set; }
 
         public string FilterId { get; set; }
 
-        public bool FormatDecimalAsComma { get; set; }
+        public bool? FormatDecimalAsComma { get; set; }
 
-        public bool IncludeDisplayOrder { get; set; }
+        public bool? IncludeDisplayOrder { get; set; }
 
-        public int Limit { get; set; }
+        public int? Limit { get; set; }
 
-        public int MultiselectSeenUnansweredRecode { get; set; }
+        public int? MultiselectSeenUnansweredRecode { get; set; }
 
         public string NewlineReplacement { get; set; }
 
-        public int SeenUnansweredRecode { get; set; }
+        public int? SeenUnansweredRecode { get; set; }
 
         public string StartDate { get; set; }
 
         public string TimeZone { get; set; }
 
-        public bool UseLabels { get; set; }
+        public bool? UseLabels { get; set; }
 
         public string[] EmbeddedDataIds { get; set; }
 
@@ -61,8 +61,8 @@ namespace Qualtrics.Net.Lang.Requests.SurveyResponseImportExport
 
         public string ContinuationToken { get; set; }
 
-        public bool AllowContinuation { get; set; }
+        public bool? AllowContinuation { get; set; }
 
-        public bool IncludeLabelColumns { get; set; }
+        public bool? IncludeLabelColumns { get; set; }
     }
 }

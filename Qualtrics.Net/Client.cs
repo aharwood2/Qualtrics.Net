@@ -18,10 +18,12 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Qualtrics.Net.Interfaces;
+using Qualtrics.Net.Lang;
 using Qualtrics.Net.Lang.Requests;
 using Qualtrics.Net.Lang.Requests.SurveyResponseImportExport;
 using Qualtrics.Net.Lang.Requests.SurveyResponses;
 using Qualtrics.Net.Lang.Responses;
+using Qualtrics.Net.Lang.Responses.Meta;
 using Qualtrics.Net.Lang.Responses.SurveyResponseImportExport;
 using Qualtrics.Net.Lang.Responses.SurveyResponses;
 using System;
@@ -158,7 +160,8 @@ namespace Qualtrics.Net
                     ContractResolver = new DefaultContractResolver
                     {
                         NamingStrategy = new CamelCaseNamingStrategy()
-                    }
+                    },
+                    NullValueHandling = NullValueHandling.Ignore
                 });
 
                 // Add to message
@@ -188,8 +191,16 @@ namespace Qualtrics.Net
             }
             else
             {
-                // TODO: Response should encapsulate the HTTP reply
-                Debug.WriteLine($"HTTP FAILED! {httpReply.ReasonPhrase}");
+                // Parse HTTP reply to meta
+                resBodyObj.Meta = new MetaWithError
+                {
+                    HttpStatus = ((int)httpReply.StatusCode).ToString(),
+                    Error = new Error
+                    {
+                        ErrorCode = ((int)httpReply.StatusCode).ToString(),
+                        ErrorMessage = httpReply.ReasonPhrase
+                    }
+                };
             }
             return resBodyObj;
         }
