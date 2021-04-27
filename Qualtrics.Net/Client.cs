@@ -19,8 +19,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Qualtrics.Net.Interfaces;
 using Qualtrics.Net.Lang.Requests;
+using Qualtrics.Net.Lang.Requests.SurveyResponseImportExport;
 using Qualtrics.Net.Lang.Requests.SurveyResponses;
 using Qualtrics.Net.Lang.Responses;
+using Qualtrics.Net.Lang.Responses.SurveyResponseImportExport;
 using Qualtrics.Net.Lang.Responses.SurveyResponses;
 using System;
 using System.Collections.Generic;
@@ -31,7 +33,7 @@ using System.Threading.Tasks;
 
 namespace Qualtrics.Net
 {
-    sealed class Client : ISurveyResponses
+    sealed class Client : ISurveyResponses, ISurveyResponseImportExport
     {
         // Fields
         private HttpClient client;
@@ -63,7 +65,7 @@ namespace Qualtrics.Net
             client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
         }
 
-        // Survey Responses Implementation //
+        #region ISurveyResponses
 
         /// <summary>
         /// 
@@ -73,15 +75,64 @@ namespace Qualtrics.Net
         /// <returns></returns>
         public Task<CreateResponseResponse> CreateResponse(string surveyId, CreateResponseRequest req)
         {
-            // Build endpoint
-            var uri = new Uri($"/API/v3/surveys/{surveyId}/responses", UriKind.Relative);
-
-            // Send
-            var res = PostMessage<CreateResponseResponse, CreateResponseRequest>(uri, req);
-
-            // Return the response
-            return res;
+            return PostMessage<CreateResponseResponse, CreateResponseRequest>(
+                new Uri($"/API/v3/surveys/{surveyId}/responses", UriKind.Relative),
+                req
+            );
         }
+
+        #endregion
+
+        #region ISurveyResponseImportExport
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="surveyId"></param>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public Task<CreationResponse> StartResponseExport(string surveyId, ExportCreationRequest req)
+        {
+            return PostMessage<CreationResponse, ExportCreationRequest>(
+                new Uri($"/API/v3/surveys/{surveyId}/export-responses", UriKind.Relative),
+                req
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exportProgressId"></param>
+        /// <param name="surveyId"></param>
+        /// <returns></returns>
+        public Task<ExportStatusResponse> GetResponseExportProgress(string exportProgressId, string surveyId)
+        {
+            return PostMessage<ExportStatusResponse, Request>(
+                new Uri($"/API/v3/surveys/{surveyId}/export-responses/{exportProgressId}", UriKind.Relative),
+                null
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <param name="surveyId"></param>
+        /// <returns></returns>
+        public Task<string> GetResponseExportFile(string fileId, string surveyId)
+        {
+            var res = PostMessage<Response, Request>(
+                new Uri($"/API/v3/surveys/{surveyId}/export-responses/{fileId}/file", UriKind.Relative),
+                null
+            );
+
+            // TODO: Extract file contents?
+            return new Task<string>(() => "");
+        }
+
+        #endregion
+
+        #region Generics
 
         // Method to build message and pass back reply
         private async Task<T> PostMessage<T, U>(Uri uri, U req = null)
@@ -142,5 +193,7 @@ namespace Qualtrics.Net
             }
             return resBodyObj;
         }
+
+        #endregion
     }
 }
