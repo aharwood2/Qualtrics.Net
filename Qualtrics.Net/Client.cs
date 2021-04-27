@@ -69,20 +69,10 @@ namespace Qualtrics.Net
         }
 
         // Method to build message and pass back reply
-        private async Task<T> PostMessage<T, U>(Uri uri, U req)
+        private async Task<T> PostMessage<T, U>(Uri uri, U req = null)
             where T : Response
             where U : Request
         {
-            // Build content using camelcase resolver
-            string json = JsonConvert.SerializeObject(req, new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                }
-            });
-            var content = new StringContent(json, Encoding.Default, "application/json");
-
             // Build message
             var message = new HttpRequestMessage
             {
@@ -91,9 +81,23 @@ namespace Qualtrics.Net
                 Headers =
                 {
                     { "x-api-token", apiKey },
-                },
-                Content = content
+                }
             };
+
+            if (req != null)
+            {
+                // Build body content using camelcase resolver
+                string json = JsonConvert.SerializeObject(req, new JsonSerializerSettings
+                {
+                    ContractResolver = new DefaultContractResolver
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    }
+                });
+
+                // Add to message
+                message.Content = new StringContent(json, Encoding.Default, "application/json");
+            }
 
             // Send message and return response
             return await SendMessage<T>(message);
