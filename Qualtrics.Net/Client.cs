@@ -109,7 +109,7 @@ namespace Qualtrics.Net
         /// <returns></returns>
         public Task<ExportStatusResponse> GetResponseExportProgress(string exportProgressId, string surveyId)
         {
-            return PostMessage<ExportStatusResponse, Request>(
+            return GetMessage<ExportStatusResponse>(
                 new Uri($"/API/v3/surveys/{surveyId}/export-responses/{exportProgressId}", UriKind.Relative),
                 null
             );
@@ -123,7 +123,7 @@ namespace Qualtrics.Net
         /// <returns></returns>
         public Task<string> GetResponseExportFile(string fileId, string surveyId)
         {
-            var res = PostMessage<Response, Request>(
+            var res = GetMessage<Response>(
                 new Uri($"/API/v3/surveys/{surveyId}/export-responses/{fileId}/file", UriKind.Relative),
                 null
             );
@@ -136,22 +136,13 @@ namespace Qualtrics.Net
 
         #region Generics
 
-        // Method to build message and pass back reply
+        // Method to build post message and pass back reply
         private async Task<T> PostMessage<T, U>(Uri uri, U req = null)
-            where T : Response
+            where T : Response, new()
             where U : Request
         {
             // Build message
-            var message = new HttpRequestMessage
-            {
-                Method = HttpMethod.Post,
-                RequestUri = uri,
-                Headers =
-                {
-                    { "x-api-token", apiKey },
-                }
-            };
-
+            var message = GetHttpRequestMessage(uri, HttpMethod.Post);
             if (req != null)
             {
                 // Build body content using camelcase resolver
@@ -172,9 +163,33 @@ namespace Qualtrics.Net
             return await SendMessage<T>(message);
         }
 
+        private async Task<T> GetMessage<T>(Uri uri, object p)
+            where T : Response, new()
+        {
+            // Build message
+            var message = GetHttpRequestMessage(uri, HttpMethod.Get);
+
+            // Send message and return response
+            return await SendMessage<T>(message);
+        }
+
+        // Method to construct a message
+        private HttpRequestMessage GetHttpRequestMessage(Uri uri, HttpMethod method)
+        {
+            return new HttpRequestMessage
+            {
+                Method = method,
+                RequestUri = uri,
+                Headers =
+                {
+                    { "x-api-token", apiKey },
+                }
+            };
+        }
+
         // Method to send and deserialise the reply
         private async Task<T> SendMessage<T>(HttpRequestMessage message)
-            where T : Response
+            where T : Response, new()
         {
             // Send message
             var httpReply = await client.SendAsync(message);
@@ -192,6 +207,7 @@ namespace Qualtrics.Net
             else
             {
                 // Parse HTTP reply to meta
+                resBodyObj = new T();
                 resBodyObj.Meta = new MetaWithError
                 {
                     HttpStatus = ((int)httpReply.StatusCode).ToString(),

@@ -24,7 +24,7 @@ using System.Text;
 namespace Qualtrics.Net.Lang.Responses
 {
     // Response base class
-    public abstract class Response
+    public class Response
     {
         [JsonProperty("meta")]
         public MetaWithError Meta { get; internal set; }
