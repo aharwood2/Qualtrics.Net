@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 
 namespace Qualtrics.Net
 {
-    sealed class Client : ISurveyResponses, ISurveyResponseImportExport
+    sealed public class Client : ISurveyResponses, ISurveyResponseImportExport
     {
         // Fields
         private HttpClient client;
