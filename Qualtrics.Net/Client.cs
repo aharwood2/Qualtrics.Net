@@ -19,7 +19,6 @@ namespace Qualtrics.Net
         // Fields
         private HttpClient client;
         private string apiKey;
-        private string baseUrl;
 
         // Singleton Design
         private static readonly Lazy<Client> lazy = new Lazy<Client>(() => new Client());
@@ -42,7 +41,6 @@ namespace Qualtrics.Net
         {
             // Set the keys
             this.apiKey = apiKey;
-            this.baseUrl = baseUrl;
 
             // Create the client
             client = new HttpClient() { BaseAddress = new Uri(baseUrl) };
