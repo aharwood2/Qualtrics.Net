@@ -18,6 +18,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Qualtrics.Net.Lang.Responses.SurveyResponseImportExport
@@ -62,5 +63,10 @@ namespace Qualtrics.Net.Lang.Responses.SurveyResponseImportExport
 
         [JsonProperty("continuationToken")]
         public string ContinuationToken { get; internal set; }
+    }
+
+    public class ResponseExportFile : Response
+    {
+        public Stream FileContents { get; internal set; }
     }
 }

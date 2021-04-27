@@ -30,6 +30,6 @@ namespace Qualtrics.Net.Interfaces
 
         Task<ExportStatusResponse> GetResponseExportProgress(string exportProgressId, string surveyId);
 
-        Task<string> GetResponseExportFile(string fileId, string surveyId);
+        Task<ResponseExportFile> GetResponseExportFile(string fileId, string surveyId);
     }
 }

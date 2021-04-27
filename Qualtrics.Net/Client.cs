@@ -121,15 +121,12 @@ namespace Qualtrics.Net
         /// <param name="fileId"></param>
         /// <param name="surveyId"></param>
         /// <returns></returns>
-        public Task<string> GetResponseExportFile(string fileId, string surveyId)
+        public Task<ResponseExportFile> GetResponseExportFile(string fileId, string surveyId)
         {
-            var res = GetMessage<Response>(
+            return GetMessage<ResponseExportFile>(
                 new Uri($"/API/v3/surveys/{surveyId}/export-responses/{fileId}/file", UriKind.Relative),
                 null
             );
-
-            // TODO: Extract file contents?
-            return new Task<string>(() => "");
         }
 
         #endregion
@@ -195,19 +192,30 @@ namespace Qualtrics.Net
             var httpReply = await client.SendAsync(message);
 
             // Process response
-            T resBodyObj = null;
+            T resBodyObj = new T();
             if (httpReply.IsSuccessStatusCode)
             {
-                // Read response
-                var resBody = await httpReply.Content.ReadAsStringAsync();
+                // Special cases don't have a desrialisable response body
+                if (typeof(T) == typeof(ResponseExportFile))
+                {
+                    var resObj = new ResponseExportFile
+                    {
+                        FileContents = await httpReply.Content.ReadAsStreamAsync()
+                    };
+                    return resObj as T;
+                }
+                else
+                {
+                    // Read response
+                    var resBody = await httpReply.Content.ReadAsStringAsync();
 
-                // Deserialise
-                resBodyObj = JsonConvert.DeserializeObject<T>(resBody);
+                    // Deserialise
+                    resBodyObj = JsonConvert.DeserializeObject<T>(resBody);
+                }
             }
             else
             {
                 // Parse HTTP reply to meta
-                resBodyObj = new T();
                 resBodyObj.Meta = new MetaWithError
                 {
                     HttpStatus = ((int)httpReply.StatusCode).ToString(),
