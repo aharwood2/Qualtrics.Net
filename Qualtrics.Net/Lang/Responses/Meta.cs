@@ -8,26 +8,20 @@ namespace Qualtrics.Net.Lang.Responses.Meta
     // Meta with error
     public class MetaWithError
     {
-        [JsonProperty("httpStatus")]
-        public string HttpStatusCode { get; internal set; }
+        public string HttpStatus { get; internal set; }
 
-        [JsonProperty("requestId")]
         public string RequestId { get; internal set; }
 
-        [JsonProperty("notice")]
         public string Notice { get; internal set; }
 
-        [JsonProperty("error")]
         public Error Error { get; internal set; }
     }
 
     // Error
     public class Error
     {
-        [JsonProperty("errorMessage")]
-        public string Message { get; internal set; }
+        public string ErrorMessage { get; internal set; }
 
-        [JsonProperty("errorCode")]
-        public string Code { get; internal set; }
+        public string ErrorCode { get; internal set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Qualtrics.Net.Lang.Responses.Meta;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,18 +8,11 @@ namespace Qualtrics.Net.Lang.Responses.SurveyResponses
 
     public class CreateResponseResponse : Response
     {
-        [JsonProperty("result")]
-        public Result Result { get; internal set; }
-
-        public override bool IsSuccess()
-        {
-            return Meta.HttpStatusCode == "200";
-        }
+        public CreateResponseResult Result { get; internal set; }
     }
 
-    public class Result
+    public class CreateResponseResult
     {
-        [JsonProperty("responseId")]
         public string ResponseId { get; internal set; }
     }
 

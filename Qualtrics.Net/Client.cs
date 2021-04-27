@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Qualtrics.Net.Interfaces;
 using Qualtrics.Net.Lang.Requests;
 using Qualtrics.Net.Lang.Requests.SurveyResponses;
@@ -72,8 +73,14 @@ namespace Qualtrics.Net
             where T : Response
             where U : Request
         {
-            // Build content
-            string json = JsonConvert.SerializeObject(req);
+            // Build content using camelcase resolver
+            string json = JsonConvert.SerializeObject(req, new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                }
+            });
             var content = new StringContent(json, Encoding.Default, "application/json");
 
             // Build message
