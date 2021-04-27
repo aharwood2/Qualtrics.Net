@@ -15,6 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,11 +26,13 @@ namespace Qualtrics.Net.Lang.Responses.SurveyResponses
 
     public class CreateResponseResponse : Response
     {
+        [JsonProperty("result")]
         public CreateResponseResult Result { get; internal set; }
     }
 
     public class CreateResponseResult
     {
+        [JsonProperty("responseId")]
         public string ResponseId { get; internal set; }
     }
 

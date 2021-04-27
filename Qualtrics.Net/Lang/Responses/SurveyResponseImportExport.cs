@@ -15,6 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,33 +24,43 @@ namespace Qualtrics.Net.Lang.Responses.SurveyResponseImportExport
 {
     public class CreationResponse : Response
     {
+        [JsonProperty("result")]
         public CreationResponseResult Result { get; internal set; }
     }
 
     public class CreationResponseResult
     {
+        [JsonProperty("progressId")]
         public string ProgressId { get; internal set; }
 
+        [JsonProperty("percentComplete")]
         public float PercentComplete { get; internal set; }
 
+        [JsonProperty("status")]
         public string Status { get; internal set; }
 
+        [JsonProperty("continuationToken")]
         public string ContinuationToken { get; internal set; }
     }
 
     public class ExportStatusResponse : Response
     {
+        [JsonProperty("result")]
         public ExportStatusResult Result { get; internal set; }
     }
 
     public class ExportStatusResult
     {
+        [JsonProperty("fileId")]
         public string FileId { get; internal set; }
 
+        [JsonProperty("percentComplete")]
         public float PercentComplete { get; internal set; }
 
+        [JsonProperty("status")]
         public string Status { get; internal set; }
 
+        [JsonProperty("continuationToken")]
         public string ContinuationToken { get; internal set; }
     }
 }

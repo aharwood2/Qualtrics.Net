@@ -15,6 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using Newtonsoft.Json;
 using Qualtrics.Net.Lang.Responses.Meta;
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,13 @@ namespace Qualtrics.Net.Lang.Responses
     // Response base class
     public abstract class Response
     {
+        [JsonProperty("meta")]
         public MetaWithError Meta { get; internal set; }
 
         // Not part of API
         public virtual bool IsSuccess()
         {
-            return Meta.HttpStatus == "200";
+            return Meta?.HttpStatus == "200";
         }
     }
 }
