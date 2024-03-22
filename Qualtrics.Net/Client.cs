@@ -15,6 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Qualtrics.Net.Interfaces;
@@ -26,12 +32,6 @@ using Qualtrics.Net.Lang.Responses;
 using Qualtrics.Net.Lang.Responses.Meta;
 using Qualtrics.Net.Lang.Responses.SurveyResponseImportExport;
 using Qualtrics.Net.Lang.Responses.SurveyResponses;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Qualtrics.Net
 {

@@ -15,11 +15,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using Newtonsoft.Json;
-using Qualtrics.Net.Lang.Responses.Meta;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
+using Qualtrics.Net.Lang.Responses.Meta;
 
 namespace Qualtrics.Net.Lang.Responses
 {
